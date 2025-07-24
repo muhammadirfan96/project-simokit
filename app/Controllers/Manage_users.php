@@ -102,24 +102,66 @@ class Manage_users extends BaseController
         return redirect()->to(base_url('/manage_users'));
     }
 
+    // public function save_bidang()
+    // {
+    //     $request = $this->request->getVar();
+    //     dd($request);
+
+    //     $pesan = 'tidak ada bidang user yang di ubah';
+    //     foreach ($request as $key => $value) {
+    //         if ($this->UserModel->asArray()->find($key)['bidang'] != explode(' | ', $value)[0]) {
+    //             $this->UserModel->save([
+    //                 'id' => $key,
+    //                 'bidang' => explode(' | ', $value)[0]
+    //             ]);
+
+    //             $this->GroupsUsersModel->save([
+    //                 'user_id' => $key,
+    //                 'group_id' => explode(' | ', $value)[1]
+    //             ]);
+
+    //             $pesan = 'bidang user telah di ubah';
+    //         }
+    //     }
+
+    //     session()->setFlashdata('pesanSuccess', $pesan);
+    //     return redirect()->to(base_url('/manage_users'));
+    // }
     public function save_bidang()
     {
         $request = $this->request->getVar();
+        $pesan = 'tidak ada bidang user yang diubah';
 
-        $pesan = 'tidak ada bidang user yang di ubah';
         foreach ($request as $key => $value) {
-            if ($this->UserModel->asArray()->find($key)['bidang'] != explode(' | ', $value)[0]) {
+            // Lewati jika value tidak memiliki ' | ' (format tidak valid)
+            if (strpos($value, ' | ') === false) {
+                continue;
+            }
+
+            // Pecah nilai menjadi bidang dan group_id
+            list($bidangBaru, $groupBaru) = explode(' | ', $value);
+
+            // Ambil data user dari database
+            $user = $this->UserModel->asArray()->find($key);
+
+            // Jika user tidak ditemukan, skip
+            if (!$user) {
+                continue;
+            }
+
+            // Update hanya jika bidang berubah
+            if ($user['bidang'] != $bidangBaru) {
                 $this->UserModel->save([
                     'id' => $key,
-                    'bidang' => explode(' | ', $value)[0]
+                    'bidang' => $bidangBaru
                 ]);
 
                 $this->GroupsUsersModel->save([
                     'user_id' => $key,
-                    'group_id' => explode(' | ', $value)[1]
+                    'group_id' => $groupBaru
                 ]);
 
-                $pesan = 'bidang user telah di ubah';
+                $pesan = 'bidang user telah diubah';
             }
         }
 
