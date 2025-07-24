@@ -1,0 +1,54 @@
+version: "3.8"
+
+services:
+  simokit:
+    build: .
+    container_name: simokit
+    environment:
+      - VIRTUAL_HOST=simokit.local.test
+      - VIRTUAL_PORT=80
+      - LETSENCRYPT_HOST=simokit.local.test
+      - LETSENCRYPT_EMAIL=muhammadirfan187@outlook.com
+    volumes:
+      - .:/var/www/html
+    expose:
+      - "80"
+    networks:
+      - proxy
+    depends_on:
+      - db
+
+  db:
+    image: mysql:5.7
+    restart: always
+    environment:
+      MYSQL_DATABASE: simokit_db
+      MYSQL_USER: simokit_user
+      MYSQL_PASSWORD: Sayasaja123#1
+      MYSQL_ROOT_PASSWORD: Sayasaja123#12
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      - proxy
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: simokit-phpmyadmin
+    restart: always
+    environment:
+      - PMA_HOST=db
+      - VIRTUAL_HOST=phpmyadmin.local.test
+      - VIRTUAL_PORT=80
+    expose:
+      - "80"
+    depends_on:
+      - db
+    networks:
+      - proxy
+
+volumes:
+  db_data:
+
+networks:
+  proxy:
+    external: true

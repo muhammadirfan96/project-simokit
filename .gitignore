@@ -1,0 +1,40 @@
+# CI4-specific
+# .env
+# .env.*
+# /vendor/
+/public/img-5s/*
+/public/img-profile/*
+/public/img-sr/*
+/public/img-ttd/*
+
+writable/cache/*
+!writable/cache/index.html
+writable/debugbar/*
+!writable/debugbar/.gitkeep
+writable/logs/*
+!writable/logs/index.html
+writable/session/*
+!writable/session/index.html
+writable/uploads/*
+!writable/uploads/index.html
+
+# System files
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+
+# Node modules (kalau pakai frontend tooling kayak Vite, Tailwind, dll)
+node_modules/
+
+# IDE/editor configs
+.vscode/
+.idea/
+*.log
+
+# txt files
+importdatabase.txt
+passku.txt
+
+# database
+*.sql
