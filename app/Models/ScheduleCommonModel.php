@@ -142,7 +142,7 @@ class ScheduleCommonModel extends Model
             );
             $listCO[] = $this->warmingUp(
                 'warmingupedg',
-                'WARMING UP EDG'
+                'WARMING UP EDG UNIT & EDG PLTG'
             );
             $listCO[] = $this->warmingUp(
                 'warmingupauxboiler',
